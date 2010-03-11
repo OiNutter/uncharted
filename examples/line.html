@@ -27,14 +27,15 @@
 	
 	document.observe('dom:loaded',function(){	
 	
-		var data = [
-					{data:20,label:'Data 1',link:{url:"http://www.google.co.uk"}},
-					{data:40,label:'Big Data 2',link:{url:"http://uk.yahoo.com",target:"_blank"}},
-					{data:25,label:'Data 3',link:"http://www.oinutter.co.uk"},
-					{data:15,label:'Data 4'}
-					];
 	
-		var pie = new Uncharted.pie('paper',data);
+		var series1 = [[0, 0], [1, 2], [2, 24], [3, 3], [4, 20], [5, 0], [6, 6], [7, 49], [8, 80], [9, 108], [10, 110], [11, 121], [12, 144], [13, 78]];
+		var series2 = [[0, 68], [1, 26], [2, 65], [3, 47], [4, 79], [5, 0], [6, 83], [7, 94], [8, 23], [9, 9], [10, 13], [11, 46], [12, 93], [13, 64]];
+		var data = [
+					{data: series1, label: "Data 1"},
+					{data: series2, label: "Data 2"}
+					]
+	
+		var chart = new Uncharted.line('paper',data,{legend:{show:false}});
 	});
 
 </script>

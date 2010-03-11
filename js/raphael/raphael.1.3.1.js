@@ -2074,6 +2074,7 @@ Raphael = (function () {
                     this.arcsize = arcsize;
                     for (var i in attr) {
                         a[i] = attr[i];
+                        
                     }
                     delete a.scale;
                     this.attr(a);
@@ -2433,21 +2434,26 @@ Raphael = (function () {
     })();
     for (var i = events[length]; i--;) {
         (function (eventName) {
-            Element[proto][eventName] = function (fn) {
+            Element[proto][eventName] = function (fn,id) {
+            	if(eventName=="click")
+            		console.log(id+":" +eventName,fn);
                 if (R.is(fn, "function")) {
                     this.events = this.events || [];
                     this.events.push({name: eventName, f: fn, unbind: addEvent(this.shape || this.node, eventName, fn, this)});
                 }
                 return this;
             };
-            Element[proto]["un" + eventName] = function (fn) {
+            Element[proto]["un" + eventName] = function (fn,id) {
                 var events = this.events,
                     l = events[length];
-                while (l--) if (events[l].name == eventName && events[l].f == fn) {
-                    events[l].unbind();
+                while (l--){ console.log(fn);
+                if (events[l].name == eventName && events[l].f == fn) {
+                    console.log('bob');
+                	events[l].unbind();
                     events.splice(l, 1);
                     !events.length && delete this.events;
                     return this;
+                }
                 }
                 return this;
             };
