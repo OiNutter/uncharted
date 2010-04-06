@@ -28,13 +28,13 @@
 	document.observe('dom:loaded',function(){	
 	
 		var data = [
-					{data:20,label:'Data 1',link:{url:"http://www.google.co.uk"}},
-					{data:40,label:'Big Data 2',link:{url:"http://uk.yahoo.com",target:"_blank"}},
-					{data:25,label:'Data 3',link:"http://www.oinutter.co.uk"},
-					{data:15,label:'Data 4'}
-					];
-	
-		var pie = new Uncharted.pie('paper',data);
+		{data:20,label:"Data 1"},
+		{data:25,label:"Data 2"},
+		{data:15,label:"Data 3"},
+		{data:40,label:"Data 4"}
+		];
+		
+		var pie = new Uncharted.pie('paper',data,options);
 	});
 
 </script>

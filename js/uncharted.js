@@ -69,8 +69,7 @@ Uncharted.base = Class.create({
   		var res = [],s,total=0,v;
   			
   		this.data.each(function(d){
-  				
-  			if(!Object.isUndefined(d.data)) {
+   			if((d.data == 0 || d.data || !d.data || d.data != null)) {
   				s = {};
   				total += d.data;
   				for(v in d)
@@ -203,10 +202,13 @@ Uncharted.pie = Class.create(Uncharted.base,{
  				labels = this.options.labels;
  			 			
  	 		this.graphData = this.parseData();
- 	 	 	 		
  	 		this.graphData.data.each(function(d){
- 	 			if(d.data==0)
+ 	 			if(d.data==0){
+ 	 				segments.fills.push(null);
+ 	 				segments.shadows.push(null);
+ 	 				segments.labels.push(null)
  	 				return false;
+ 	 			}
  	 			var angle = d.data/this.graphData.total * 360,
  	 				x1 = cx + r * Math.cos(-currentAngle * rad),
  	 				y1 = cy + r * Math.sin(-currentAngle * rad),
@@ -246,7 +248,7 @@ Uncharted.pie = Class.create(Uncharted.base,{
  	 					segments.shadows.push(shadowPath);
  	 				
  	 				if(labels.show)
- 	 					segments.labels.push(this.paper.text(labelx,labely,((d.data/this.graphData.total) * 100).toFixed(labels.accuracy) + "%").attr({'text-color':labels.textColor,'text-anchor':((Math.abs(endAngle)<180) ? "start" : "end")}).toFront());
+ 	 					segments.labels.push(this.paper.text(labelx,labely,((d.data/this.graphData.total) * 100).toFixed(labels.accuracy) + "%").attr({'text-color':labels.textColor,'text-anchor':((labelx>cx) ? "start" : "end")}).toFront());
  	 				
  	 				
  	 			
@@ -275,6 +277,9 @@ Uncharted.pie = Class.create(Uncharted.base,{
  	 		}
  			
  			sectors.fills.each(function(s,i){
+ 				if(s==null)
+ 					return false ;
+ 				
  				segment = this.paper.path(s);
  				segment.url = s.url;
  				segment.target = s.target;
@@ -819,7 +824,6 @@ Uncharted.time = Class.create(Uncharted.line,{
 			
 		//call base class initialize
 		$super(element,data,options);
-		console.log(this.options);
 	},
 	getTimeForPeriod: function(period){
 		switch(period){
