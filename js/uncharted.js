@@ -131,12 +131,19 @@ Uncharted.base = Class.create({
  		 	bb = textBox.getBBox(),
  			w = bb.width / 2,
  			h = bb.height / 2,
- 			pb;
+ 			pb,
+ 			newy;
  						
  		res.push(this.paper.rect(x-w-5,y-h*2-15,bb.width+10,bb.height+10,5).attr({"fill": "#000", "stroke-width": 0}));
  		res.push(textBox.toFront());
  		pb = res.getBBox();
- 		res[1].attr({"x":pb.x+pb.width/2,"y":pb.y+12.5,"text-anchor":"middle"}); 		 				
+ 		newy = pb.y + 12.5
+ 		if(pb.y<this.options.gutter.y){
+ 			newy+=pb.height
+ 			res.attr({"y":pb.y+pb.height});
+ 		}
+ 		res[1].attr({"x":pb.x+pb.width/2,"y":newy,"text-anchor":"middle"});
+ 		
  		
  		return res;
  	}
@@ -693,8 +700,8 @@ Uncharted.pie = Class.create(Uncharted.base,{
  				clearTimeout(chart.toolTimer);
  				chart.toolTip[1].attr('text',this.label);
  				txb = chart.toolTip[1].getBBox();
- 				chart.toolTip[0].animate({width:txb.width+10,height:txb.height+10,x:(bb.x+bb.width/2)-(txb.width/2)-5,y:bb.y - txb.height-10,fill:this[1].attr('fill') },200);
- 				chart.toolTip[1].animateWith(chart.toolTip[0],{x:(bb.x+bb.width/2),y:(bb.y-bb.height/2)-txb.height+7.5},200);
+ 				chart.toolTip[0].animate({width:txb.width+10,height:txb.height+10,x:(bb.x+bb.width/2)-(txb.width/2)-5,y:((bb.y - txb.height-10)>=chart.options.gutter.y) ? bb.y - txb.height-10 : bb.y +10,fill:this[1].attr('fill') },200);
+ 				chart.toolTip[1].animateWith(chart.toolTip[0],{x:(bb.x+bb.width/2),y:((bb.y - txb.height-10)>=chart.options.gutter.y) ? (bb.y-bb.height/2)-txb.height+7.5 : bb.y+txb.height+7.5},200);
  			}
  		},
  	onMouseOut: function(chart){
