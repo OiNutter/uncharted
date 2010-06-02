@@ -39,6 +39,10 @@
 					markerWidth:4,
 					markerHeight:4,
 					format: "x + ',' + y"
+					},
+				labels: {
+					show:true,
+					showOn:'rollover'
 					}
 			},options);
 	 		
@@ -74,7 +78,11 @@
  				this.legend = this.drawLegend();
  				rightMargin = this.legend.getBBox().width +10;
  			}
- 					
+ 			
+ 			if(this.options.labels.show){
+ 				this.options.yaxis.max+=this.options.yaxis.increment;
+ 			}
+ 			
  			this.options.xaxis.gap = (this.options.xaxis.increment != "auto") ? ((this.width - 30 - this.options.gutter.x*2 - rightMargin) / ((this.options.xaxis.max - this.options.xaxis.min)/this.options.xaxis.increment)) : this.options.xaxis.minSize;
  			this.options.yaxis.gap = (this.options.yaxis.increment != "auto") ? ((this.height - 30 - this.options.gutter.y*2) / ((this.options.yaxis.max - this.options.yaxis.min)/this.options.yaxis.increment)) : this.options.yaxis.minSize;
  			if(this.options.xaxis.increment == "auto")
@@ -101,19 +109,23 @@
  				gapx = this.options.xaxis.gap,
  				gapy = this.options.yaxis.gap,
  				incx = this.options.xaxis.increment,
- 				incy = this.options.yaxis.increment;
+ 				incy = this.options.yaxis.increment,
+ 				labels = this.options.labels;
  				 			 			
  			this.graphData.data.each(function(s,n){
- 				series = {bars:[]};
+ 				series = {bars:[],labels:[]};
  				s.data.each(function(d,i){
-  					var mod = (this.graphData.data.length - (n+1)) * 3,
+  					var mod = ((this.graphData.data.length==1 ? 2 : this.graphData.data.length) - (n+1)) * 3,
  						newx = 2+((this.labels.x.indexOf(d[0]))/incx) *gapx + this.axis.x.getBBox().x -gapx * ((mod == 0) ? 0 : (1/mod)),
  						newy = this.axis.x.getBBox().y - ((parseFloat(d[1])-this.options.yaxis.min)/incy)*gapy-3,
  						width = gapx/(1.5*this.graphData.data.length);
  						height = ((parseFloat(d[1])-this.options.yaxis.min)/incy)*gapy+ ((parseFloat(d[1])>0) ? 3 : 0);
- 		
   					bar = [newx,newy,width,height];
   					series.bars.push(bar);
+  					
+  					if(labels.show)
+  						series.labels.push(this.paper.text(newx+(width/2),newy-10,d[1]));
+  					
  				}.bind(this));
  				
 	 			sets.push(series);
@@ -185,9 +197,11 @@
  				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y,String.interpret(i)).attr({'text-anchor':'end'}));
  				n++;
  			}
+ 			
  			//reset labels to be level all on page
  			yb = ylabels.getBBox();
  			ylabels.attr('x',yb.width + gutter.x);
+ 			yb = ylabels.getBBox();
  			
  			//draw line
  			yaxis = this.paper.path('M' + (yb.width+gutter.x+5) + ' ' + gutter.y + 'L'  + (yb.width+gutter.x+5) + ' ' + (yb.height + gutter.y)).attr({'stroke':this.options.stroke,'stroke-width':2});
@@ -207,7 +221,8 @@
  	 			n++;
  	 		}
  			xb = xlabels.getBBox();
- 			extraWidth = ((yb.width+gutter.x+7) + (((n-1)*this.options.xaxis.gap)))-(xb.width+xb.x);
+ 			extraWidth = this.options.xaxis.gap;
+ 			console.log(extraWidth);
 			if(this.options.legend.show && this.options.legend.position=="inside")
 				extraWidth = (this.width - (gutter.x*2) - 5 - yb.width) - xb.width; 
  	 		//draw line
@@ -227,7 +242,7 @@
  			
  			var series = [],
  				bars,
- 				bar;
+ 				bar;	
  			 		
   			this.sets.each(function(s,i){
   				bars = this.paper.set();
@@ -236,10 +251,7 @@
   					bars.push(bar);
   					
   				}.bind(this));
- 				
- 								
- 				
-  				
+ 				  				
   				series.push(bars);
   				if(this.options.legend.show)
   					this.keys[i].bars = bars;
@@ -301,6 +313,11 @@
  				Event.observe(this[1].node,'mouseover',chart.onMouseOverLegend.bind(this,chart));
  				Event.observe(this[1].node,'mouseout',chart.onMouseOutLegend.bind(this,chart));
  			}
+ 			
+ 		},
+ 	onMouseOver: function (chart){
+ 			
+ 			
  			
  		}
  });
