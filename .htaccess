@@ -1,0 +1,5 @@
+Options +FollowSymlinks
+RewriteEngine on
+RewriteRule \.js$ sprocketize.php [QSA]
+RewriteRule \.css$ sprocketize.php [QSA]
+

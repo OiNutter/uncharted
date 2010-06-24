@@ -67,8 +67,8 @@
  			this.options.yaxis.max = (Object.isNumber(this.options.yaxis.max)) ? this.options.yaxis.max : this.getMaxVal('y');
  			this.options.yaxis.min = (Object.isNumber(this.options.yaxis.min)) ? this.options.yaxis.min : this.getMinVal('y');
 
- 			if(this.options.xaxis.increment != "auto" && (this.options.xaxis.max-this.options.xaxis.min) % this.options.xaxis.increment > 0)
- 					this.options.xaxis.max += this.options.xaxis.increment - ((this.options.xaxis.max-this.options.xaxis.min) % this.options.xaxis.increment);		
+ 			/*if(this.options.xaxis.increment != "auto" && (this.options.xaxis.max-this.options.xaxis.min) % this.options.xaxis.increment > 0)
+ 					this.options.xaxis.max += this.options.xaxis.increment - ((this.options.xaxis.max-this.options.xaxis.min) % this.options.xaxis.increment);*/		
  					
  			if(this.options.yaxis.increment != "auto" && (this.options.yaxis.max-this.options.yaxis.min) % this.options.yaxis.increment > 0)
  				this.options.yaxis.max += this.options.yaxis.increment - ((this.options.yaxis.max-this.options.yaxis.min) % this.options.yaxis.increment);
@@ -86,9 +86,9 @@
  			this.options.xaxis.gap = (this.options.xaxis.increment != "auto") ? ((this.width - 30 - this.options.gutter.x*2 - rightMargin) / ((this.options.xaxis.max - this.options.xaxis.min)/this.options.xaxis.increment)) : this.options.xaxis.minSize;
  			this.options.yaxis.gap = (this.options.yaxis.increment != "auto") ? ((this.height - 30 - this.options.gutter.y*2) / ((this.options.yaxis.max - this.options.yaxis.min)/this.options.yaxis.increment)) : this.options.yaxis.minSize;
  			if(this.options.xaxis.increment == "auto")
- 				this.options.xaxis.increment = (this.options.xaxis.gap*(this.options.xaxis.max - this.options.xaxis.min))/(this.width - 30 - this.options.gutter.x*2 - rightMargin);
+ 				this.options.xaxis.increment = ceil(this.options.xaxis.gap*(this.options.xaxis.max - this.options.xaxis.min))/(this.width - 30 - this.options.gutter.x*2 - rightMargin);
   			if(this.options.yaxis.increment == "auto")
- 				this.options.yaxis.increment = (this.options.yaxis.gap*(this.options.yaxis.max - this.options.yaxis.min))/(this.height - 30 - this.options.gutter.y*2);
+ 				this.options.yaxis.increment = ceil(this.options.yaxis.gap*(this.options.yaxis.max - this.options.yaxis.min))/(this.height - 30 - this.options.gutter.y*2);
  			
  		},
  	generateAxisLabels: function(){
@@ -115,11 +115,11 @@
  			this.graphData.data.each(function(s,n){
  				series = {bars:[],labels:[]};
  				s.data.each(function(d,i){
-  					var mod = ((this.graphData.data.length==1 ? 2 : this.graphData.data.length) - (n+1)) * 3,
- 						newx = 2+((this.labels.x.indexOf(d[0]))/incx) *gapx + this.axis.x.getBBox().x -gapx * ((mod == 0) ? 0 : (1/mod)),
- 						newy = this.axis.x.getBBox().y - ((parseFloat(d[1])-this.options.yaxis.min)/incy)*gapy-3,
- 						width = gapx/(1.5*this.graphData.data.length);
- 						height = ((parseFloat(d[1])-this.options.yaxis.min)/incy)*gapy+ ((parseFloat(d[1])>0) ? 3 : 0);
+  					var width = gapx/(1.5*this.graphData.data.length),
+						height = ((parseFloat(d[1])-this.options.yaxis.min)/incy)*gapy+ ((parseFloat(d[1])>0) ? 3 : 0),
+ 						newx = 2+((this.labels.x.indexOf(d[0]))/incx) *gapx + this.axis.x.getBBox().x - (((gapx/1.5)/2) - (width*n)),
+ 						newy = this.axis.x.getBBox().y - ((parseFloat(d[1])-this.options.yaxis.min)/incy)*gapy-3;
+ 						;
   					bar = [newx,newy,width,height];
   					series.bars.push(bar);
   					
@@ -221,12 +221,13 @@
  	 			n++;
  	 		}
  			xb = xlabels.getBBox();
- 			extraWidth = this.options.xaxis.gap;
- 			console.log(extraWidth);
-			if(this.options.legend.show && this.options.legend.position=="inside")
-				extraWidth = (this.width - (gutter.x*2) - 5 - yb.width) - xb.width; 
+ 			extraWidth = 0;
+ 			//extraWidth = this.options.xaxis.gap;
+ 	
+ 			if(this.options.legend.show && this.options.legend.position=="inside")
+				extraWidth = (this.width - (gutter.x*2) - 5 - yb.width - yb.x) - ((n-1)*this.options.xaxis.gap); 
  	 		//draw line
- 	 		xaxis = this.paper.path('M' + (yb.width + gutter.x+5) + ' '+ (yb.height+gutter.y) + 'L' + (xb.width + yb.width+6 + extraWidth) + ' ' + (yb.height+gutter.y)).attr({'stroke':this.options.stroke,'stroke-width':2});
+ 	 		xaxis = this.paper.path('M' + (yb.width + gutter.x+5) + ' '+ (yb.height+gutter.y) + 'L' + ((n-1)*this.options.xaxis.gap + yb.width+6 + yb.x + extraWidth) + ' ' + (yb.height+gutter.y)).attr({'stroke':this.options.stroke,'stroke-width':2});
  	 		xaxis.labels = xlabels;
  	 		
  	 		this.axis = {

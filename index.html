@@ -27,12 +27,14 @@
 
 	document.observe('dom:loaded',function(){	
 						
-			var data = 	[{data:[["\u00a315",2],["\u00a340",3],["\u00a350",6],["\u00a365",19],["\u00a375",105],["\u00a3100",350]],label:"Valuation Amounts"}];
+			var data = 	[{data:[['A',2],['B',3],['C',6],['D',19]],label:"Data 1"},
+						{data:[['A',3],['B',2],['C',10],['D',19]],label:"Data 2"},
+						{data:[['A',1],['B',5],['C',8],['D',40]],label:"Data 3"}];
 
 										
 			var chart = new Uncharted.bar('paper',data,{ gutter:{
 			y:0
-		},legend:{show:false},yaxis:{increment:25}});
+		},legend:{show:true},yaxis:{increment:2}});
 	
 	});
 

@@ -19,6 +19,9 @@ Uncharted.base = Class.create({
  		if(!$(element))
  			throw new Error('Element does not exist: '  + element);
  		
+ 		if(data.length<1)
+ 			return false;
+ 		
  		this.options = {
  			colors: ["#edc240", "#00A8F0", "#C0D800", "#cb4b4b", "#4da74d", "#9440ed"],
  			stroke: "#999",

@@ -28,10 +28,9 @@
 	document.observe('dom:loaded',function(){	
 	
 		var data = [
-		{data:20,label:"Data 1"},
-		{data:25,label:"Data 2"},
-		{data:15,label:"Data 3"},
-		{data:40,label:"Data 4"}
+		{data:2,label:"Currys",link:"/admin/trade_ins/?filter&origin=currys"},
+		{data:3,label:"Dixons",link:"/admin/trade_ins/?filter&origin=dixons"},
+		{data:3,label:"Pc World",link:"/admin/trade_ins/?filter&origin=pcworld"}		
 		];
 		
 		var pie = new Uncharted.pie('paper',data);
