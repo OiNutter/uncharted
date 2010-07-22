@@ -173,6 +173,33 @@ Uncharted.base = Class.create({
 			}.bind(this));
 			
 			return minVal;
+		},
+	roundNum: function(delta){
+			var dec,size,maxDec,magn,norm;
+			dec = -Math.floor(Math.log(delta) / Math.LN10);
+				maxDec = this.options.yaxis.numTicks;
+
+				if (maxDec != null && dec > maxDec)
+					dec = maxDec;
+				magn = Math.pow(10, -dec);
+				norm = delta / magn;
+
+				if (norm < 1.5)
+					size = 1;
+				else if (norm < 3) {
+					size = 2;
+					// special case for 2.5, requires an extra decimal
+					if (norm > 2.25 && (maxDec == null || dec + 1 <= maxDec)) {
+						size = 2.5;
+						++dec;
+					}
+				}
+				else if (norm < 7.5)
+					size = 5;
+				else
+					size = 10;
+
+				return size *= magn;
 		}
 });
 

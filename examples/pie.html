@@ -10,7 +10,7 @@
 	#paper{
 		background:#fff;
 		width:500px;
-		height:400px;
+		height:300px;
 	}
 
 </style>
@@ -27,10 +27,8 @@
 	
 	document.observe('dom:loaded',function(){	
 	
-		var data = [
-		{data:2,label:"Currys",link:"/admin/trade_ins/?filter&origin=currys"},
-		{data:3,label:"Dixons",link:"/admin/trade_ins/?filter&origin=dixons"},
-		{data:3,label:"Pc World",link:"/admin/trade_ins/?filter&origin=pcworld"}		
+		var data = [{data:3016,label:"Claims",link:"/admin/claims/"},
+		{data:7496984,label:"Pack No.",link:"/admin/"}
 		];
 		
 		var pie = new Uncharted.pie('paper',data);

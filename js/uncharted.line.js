@@ -67,10 +67,13 @@ Uncharted.line = Class.create(Uncharted.base,{
  		},
  	generateAxisRanges : function(){
  			
+ 			var rightMargin,delta;
+ 			
  			this.options.xaxis.max = (Object.isNumber(this.options.xaxis.max)) ? this.options.xaxis.max : this.getMaxVal('x');
  			this.options.xaxis.min = (Object.isNumber(this.options.xaxis.min)) ? this.options.xaxis.min : this.getMinVal('x');
  			this.options.yaxis.max = (Object.isNumber(this.options.yaxis.max)) ? this.options.yaxis.max : this.getMaxVal('y');
  			this.options.yaxis.min = (Object.isNumber(this.options.yaxis.min)) ? this.options.yaxis.min : this.getMinVal('y');
+ 			
  			if(this.options.xaxis.increment != "auto" && (this.options.xaxis.max-this.options.xaxis.min) % this.options.xaxis.increment > 0)
  					this.options.xaxis.max += this.options.xaxis.increment - ((this.options.xaxis.max-this.options.xaxis.min) % this.options.xaxis.increment);		
  					
@@ -83,14 +86,27 @@ Uncharted.line = Class.create(Uncharted.base,{
  				rightMargin = this.legend.getBBox().width +10;
  			}
  					
- 			this.options.xaxis.gap = (this.options.xaxis.increment != "auto") ? ((this.width - 30 - this.options.gutter.x*2 - rightMargin) / ((this.options.xaxis.max - this.options.xaxis.min)/this.options.xaxis.increment)) : this.options.xaxis.minSize;
- 			this.options.yaxis.gap = (this.options.yaxis.increment != "auto") ? ((this.height - 30 - this.options.gutter.y*2) / ((this.options.yaxis.max - this.options.yaxis.min)/this.options.yaxis.increment)) : this.options.yaxis.minSize;
  			
- 			if(this.options.xaxis.increment == "auto")
- 				this.options.xaxis.increment = (this.options.xaxis.gap*(this.options.xaxis.max - this.options.xaxis.min))/(this.width - 30 - this.options.gutter.x*2 - rightMargin);
- 			
- 			if(this.options.yaxis.increment == "auto")
- 				this.options.yaxis.increment = (this.options.yaxis.gap*(this.options.yaxis.max - this.options.yaxis.min))/(this.height - 30 - this.options.gutter.y*2);
+  			if(this.options.xaxis.increment == "auto"){
+  				delta = (this.options.xaxis.minSize*(this.options.xaxis.max-this.options.xaxis.min))/(this.width - 30 - this.options.gutter.x*2 - rightMargin);
+ 				this.options.xaxis.increment = this.roundNum(delta);
+  			 				
+ 				if(this.options.xaxis.max%this.options.xaxis.increment > this.options.xaxis.min)
+ 					this.options.xaxis.max += this.options.xaxis.increment-(this.options.xaxis.max%this.options.xaxis.increment);
+  			}
+ 	 			
+ 			if(this.options.yaxis.increment=="auto"){
+ 				delta = (this.options.yaxis.minSize*(this.options.yaxis.max-this.options.yaxis.min))/(this.height - 30 - this.options.gutter.y*2);
+ 				this.options.yaxis.increment = this.roundNum(delta);
+  			 				
+ 				if(this.options.yaxis.max%this.options.yaxis.increment > this.options.yaxis.min)
+ 					this.options.yaxis.max += this.options.yaxis.increment-(this.options.yaxis.max%this.options.yaxis.increment);
+ 			 			
+ 			}
+
+ 			this.options.xaxis.gap = ((this.width - 30 - this.options.gutter.x*2 - rightMargin) / ((this.options.xaxis.max - this.options.xaxis.min)/this.options.xaxis.increment));
+ 			this.options.yaxis.gap = ((this.height - 30 - this.options.gutter.y*2) / ((this.options.yaxis.max - this.options.yaxis.min)/this.options.yaxis.increment));
+ 		  			 			
  		},
  	generatePaths: function(){
   			var startx,
@@ -194,6 +210,8 @@ Uncharted.line = Class.create(Uncharted.base,{
  			//draw y axis
  			//draw labels
  			
+ 			
+ 			
  			for(i = this.options.yaxis.max;i>=this.options.yaxis.min;i-=this.options.yaxis.increment){
  				if(i!=this.options.yaxis.min)
  					ticks.y.push([25,(n*this.options.yaxis.gap)+10+gutter.y]);
@@ -207,9 +225,7 @@ Uncharted.line = Class.create(Uncharted.base,{
  			//draw line
  			yaxis = this.paper.path('M' + (yb.width+gutter.x+5) + ' ' + gutter.y + 'L'  + (yb.width+gutter.x+5) + ' ' + (yb.height + gutter.y)).attr({'stroke':this.options.stroke,'stroke-width':2});
  			yaxis.labels = ylabels;
- 				
- 			
- 				
+ 				 				
  			//draw x axis
  			//draw labels
  			n = 0;

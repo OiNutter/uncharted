@@ -35,7 +35,7 @@ Uncharted.time = Class.create(Uncharted.line,{
 	
 	drawAxis:function(){
 			
-			var n = 0,
+			var n = this.options.yaxis.max/this.options.yaxis.increment,
 				ylabels = this.paper.set(),
 				xlabels = this.paper.set(),
 				gutter = this.options.gutter,
@@ -46,27 +46,34 @@ Uncharted.time = Class.create(Uncharted.line,{
 				xaxis,
 				yaxis,
 				yb,
- 				xb;
+ 				xb,
+ 				extraWidth=-gutter.x,
+ 				extraHeight=0;
 				
 			
 			//draw y axis
 			//draw labels
 			
-			for(i = this.options.yaxis.max;i>=this.options.yaxis.min;i-=this.options.yaxis.increment){
+			//if(this.options.yaxis.gap*((this.options.yaxis.max - this.options.yaxis.min)/this.options.yaxis.increment) < (this.height - 30 - this.options.gutter.y*2))
+				//extraHeight=((this.height-30-this.options.gutter.y*2) - (this.options.yaxis.gap*((this.options.yaxis.max - this.options.yaxis.min)/this.options.yaxis.increment)));
+			
+			for(i = this.options.yaxis.min;i<=this.options.yaxis.max;i+=this.options.yaxis.increment){
 				if(i!=this.options.yaxis.min)
-					ticks.y.push([25,(n*this.options.yaxis.gap)+10+gutter.y]);
-				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y,String.interpret(i)).attr({'text-anchor':'end'}));
-				n++;
+					ticks.y.push([25,(n*this.options.yaxis.gap)+10+gutter.y + extraHeight]);
+				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y+extraHeight,String.interpret(i)).attr({'text-anchor':'end'}));
+				n--;
 			}
 			//reset labels to be level all on page
 			yb = ylabels.getBBox();
 			ylabels.attr('x',yb.width + gutter.x);
+								
 			
 			//draw line
-			yaxis = this.paper.path('M' + (yb.width+gutter.x+5) + ' ' + gutter.y + 'L'  + (yb.width+gutter.x+5) + ' ' + (yb.height + gutter.y)).attr({'stroke':this.options.stroke,'stroke-width':2});
+			yaxis = this.paper.path('M' + (yb.width+gutter.x+5) + ' ' + gutter.y + 'L'  + (yb.width+gutter.x+5) + ' ' + (yb.height + gutter.y + extraHeight)).attr({'stroke':this.options.stroke,'stroke-width':2});
 			yaxis.labels = ylabels;
 				
 			
+				
 				
 			//draw x axis
 			//draw labels
@@ -78,11 +85,10 @@ Uncharted.time = Class.create(Uncharted.line,{
 	 			d = new Date(i);
 				if(i!=this.options.xaxis.min)
 	 				ticks.x.push([(yb.width+gutter.x+5) + ((n*this.options.xaxis.gap)),(this.height-20)]);
-	 			xlabels.push(this.paper.text((yb.width+gutter.x+5) + ((n*this.options.xaxis.gap)),(yb.height+gutter.y+10),monthNames[d.getMonth()] + " " + d.getDate()).attr({'text-anchor':'middle'}));
+	 			xlabels.push(this.paper.text((yb.width+gutter.x+5) + ((n*this.options.xaxis.gap)),(yb.height+gutter.y+10+extraHeight),monthNames[d.getMonth()] + " " + d.getDate()).attr({'text-anchor':'middle'}));
 	 			n++;
 	 		}
 			xb = xlabels.getBBox();
-			extraWidth = -gutter.x;
 			if(this.options.legend.show){
 				if(this.options.legend.position=="inside")
 					extraWidth = (this.width - (gutter.x*2) - 5 - yb.width) - xb.width;
@@ -91,7 +97,7 @@ Uncharted.time = Class.create(Uncharted.line,{
 			}
 					
 	 		//draw line
-	 		xaxis = this.paper.path('M' + (yb.width + gutter.x+5) + ' '+ (yb.height+gutter.y) + 'L' + (xb.width + yb.width+6 + extraWidth) + ' ' + (yb.height+gutter.y)).attr({'stroke':this.options.stroke,'stroke-width':2});
+	 		xaxis = this.paper.path('M' + (yb.width + gutter.x+5) + ' '+ (yb.height+gutter.y+extraHeight) + 'L' + (xb.width + yb.width+6 + extraWidth) + ' ' + (yb.height+gutter.y+extraHeight)).attr({'stroke':this.options.stroke,'stroke-width':2});
 	 		xaxis.labels = xlabels;
 	 		
 	 		this.axis = {
