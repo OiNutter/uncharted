@@ -869,10 +869,20 @@ Uncharted.line = Class.create(Uncharted.base,{
  			
   			if(this.options.xaxis.increment == "auto"){
   				delta = (this.options.xaxis.minSize*(this.options.xaxis.max-this.options.xaxis.min))/(this.width - 30 - this.options.gutter.x*2 - rightMargin);
- 				this.options.xaxis.increment = this.roundNum(delta);
-  			 				
+ 				if(!Object.isUndefined(this.options.monthNames))
+ 					delta /= 60;
+  				
+  				this.options.xaxis.increment = this.roundNum(delta);
+  				
+  				if(!Object.isUndefined(this.options.monthNames))
+ 					this.options.xaxis.increment *= 60;
+  				
+  		 		
+ 				
+ 				
  				if(this.options.xaxis.max%this.options.xaxis.increment > this.options.xaxis.min)
  					this.options.xaxis.max += this.options.xaxis.increment-(this.options.xaxis.max%this.options.xaxis.increment);
+ 								
   			}
  	 			
  			if(this.options.yaxis.increment=="auto"){
@@ -1227,7 +1237,6 @@ Uncharted.time = Class.create(Uncharted.line,{
 			default: return 2419200000; break;
 		}
 	},
-	
 	drawAxis:function(){
 			
 			var n = this.options.yaxis.max/this.options.yaxis.increment,

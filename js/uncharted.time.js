@@ -32,7 +32,6 @@ Uncharted.time = Class.create(Uncharted.line,{
 			default: return 2419200000; break;
 		}
 	},
-	
 	drawAxis:function(){
 			
 			var n = this.options.yaxis.max/this.options.yaxis.increment,
