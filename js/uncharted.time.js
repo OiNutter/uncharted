@@ -17,8 +17,9 @@ Uncharted.time = Class.create(Uncharted.line,{
 			options.xaxis.increment = this.getTimeForPeriod(options.xaxis.increment);
 		}
 			
-		//call base class initialize
-		$super(element,data,options);
+		//call base class
+		if(!$super(element,data,options))
+			return false;
 	},
 	getTimeForPeriod: function(period){
 		switch(period){
@@ -59,7 +60,7 @@ Uncharted.time = Class.create(Uncharted.line,{
 			for(i = this.options.yaxis.min;i<=this.options.yaxis.max;i+=this.options.yaxis.increment){
 				if(i!=this.options.yaxis.min)
 					ticks.y.push([25,(n*this.options.yaxis.gap)+10+gutter.y + extraHeight]);
-				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y+extraHeight,String.interpret(i)).attr({'text-anchor':'end'}));
+				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y+extraHeight,String.interpret(this.setDecimals(i,2))).attr({'text-anchor':'end'}));
 				n--;
 			}
 			//reset labels to be level all on page

@@ -18,10 +18,7 @@ Uncharted.base = Class.create({
  		//check element exists
  		if(!$(element))
  			throw new Error('Element does not exist: '  + element);
- 		
- 		if(data.length<1)
- 			return false;
- 		
+ 	 		
  		this.options = {
  			colors: ["#edc240", "#00A8F0", "#C0D800", "#cb4b4b", "#4da74d", "#9440ed"],
  			stroke: "#999",
@@ -64,8 +61,15 @@ Uncharted.base = Class.create({
  		this.element = element;
  		this.paper = Raphael(element);
  		this.data = data;
+ 		this.graphData = this.parseData();
+ 		
+ 		if(this.graphData.total==0)
+ 			return false;
+  	
  		this.width = parseFloat($(element).getWidth());
  		this.height = parseFloat($(element).getHeight());
+ 		
+ 		return true;
   	},
  	parseData: function(){
  				  
@@ -200,6 +204,14 @@ Uncharted.base = Class.create({
 					size = 10;
 
 				return size *= magn;
+		},
+	setDecimals: function(num,dec){
+			num = num.toFixed(dec);
+			if(num%1 == 0)
+				return Number(num).round();
+			else
+				return num;
+			
 		}
 });
 
@@ -219,8 +231,9 @@ Uncharted.pie = Class.create(Uncharted.base,{
 	 						}
 	 				},options);
 	 		
-	 		//call base class initialize
-	 		$super(element,data,options);
+	 		//call base class
+	 		if(!$super(element,data,options))
+	 			return false;
 	 		
 	 		this.options.center = this.options.center || {x:this.width/2,y:this.height/2};
 	 		this.options.radius = this.options.radius || (this.height/3);
@@ -263,7 +276,6 @@ Uncharted.pie = Class.create(Uncharted.base,{
  				shadow = this.options.shadow,
  				labels = this.options.labels;
  			 			
- 	 		this.graphData = this.parseData();
  	 		this.graphData.data.each(function(d){
  	 			if(d.data==0){
  	 				segments.fills.push(null);
@@ -485,9 +497,10 @@ Uncharted.pie = Class.create(Uncharted.base,{
 					}
 			},options);
 	 		
-	 		$super(element,data,options);
+	 		//call base class
+			if(!$super(element,data,options))
+				return false;
 	 		
-	 		this.graphData = this.parseData();
 			this.generateAxisRanges();
 			this.generateAxisLabels();
 			this.drawAxis();
@@ -649,7 +662,7 @@ Uncharted.pie = Class.create(Uncharted.base,{
  			for(i = this.options.yaxis.max;i>=this.options.yaxis.min;i-=this.options.yaxis.increment){
  				if(i!=this.options.yaxis.min)
  					ticks.y.push([25,(n*this.options.yaxis.gap)+10+gutter.y]);
- 				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y,String.interpret(i)).attr({'text-anchor':'end'}));
+ 				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y,String.interpret(this.setDecimals(i,2))).attr({'text-anchor':'end'}));
  				n++;
  			}
  			
@@ -822,28 +835,26 @@ Uncharted.line = Class.create(Uncharted.base,{
 					format: "x + ',' + y"
 					}
 			},options);
-				
+		
 			//call base class
-			$super(element,data,options);
+			if(!$super(element,data,options))
+				return false;
 			
 			this.onMouseOver = this.options.onMouseOver || this.onMouseOver;
 	 		this.onMouseOut = this.options.onMouseOut || this.onMouseOut;
 	 		this.onMouseOverLegend = this.options.legend.onMouseOver || this.onMouseOverLegend;
 	 		this.onMouseOutLegend = this.options.legend.onMouseOut || this.onMouseOutLegend;
 	 		this.onClickLegend = this.options.legend.onClick || this.onClickLegend;
-	 		
-			this.graphData = this.parseData();
-					
+	 							
 			//set up axis ranges
-			this.generateAxisRanges();
-			
-			this.drawAxis();
-			this.drawGrid();
-			this.series = this.generatePaths();
-			this.drawChart();
-			if(this.options.legend.show)
-				this.legend.toFront();
-	
+	 		this.generateAxisRanges();
+	 		this.drawAxis();
+	 		this.drawGrid();
+	 		this.series = this.generatePaths();
+	 		this.drawChart();
+	 		if(this.options.legend.show)
+	 			this.legend.toFront();
+	 		
  		},
  	generateAxisRanges : function(){
  			
@@ -896,9 +907,10 @@ Uncharted.line = Class.create(Uncharted.base,{
 
  			this.options.xaxis.gap = ((this.width - 30 - this.options.gutter.x*2 - rightMargin) / ((this.options.xaxis.max - this.options.xaxis.min)/this.options.xaxis.increment));
  			this.options.yaxis.gap = ((this.height - 30 - this.options.gutter.y*2) / ((this.options.yaxis.max - this.options.yaxis.min)/this.options.yaxis.increment));
- 		  			 			
+ 				
  		},
  	generatePaths: function(){
+ 			
   			var startx,
  				starty,
  				paths=[],
@@ -939,6 +951,7 @@ Uncharted.line = Class.create(Uncharted.base,{
  				starty = null;
  				paths.push(series);
  			}.bind(this));
+ 			
  			return paths;
  		},
  	drawLegend:function(){
@@ -1005,7 +1018,7 @@ Uncharted.line = Class.create(Uncharted.base,{
  			for(i = this.options.yaxis.max;i>=this.options.yaxis.min;i-=this.options.yaxis.increment){
  				if(i!=this.options.yaxis.min)
  					ticks.y.push([25,(n*this.options.yaxis.gap)+10+gutter.y]);
- 				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y,String.interpret(i)).attr({'text-anchor':'end'}));
+ 				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y,String.interpret(this.setDecimals(i,2))).attr({'text-anchor':'end'}));
  				n++;
  			}
  			//reset labels to be level all on page
@@ -1015,7 +1028,8 @@ Uncharted.line = Class.create(Uncharted.base,{
  			//draw line
  			yaxis = this.paper.path('M' + (yb.width+gutter.x+5) + ' ' + gutter.y + 'L'  + (yb.width+gutter.x+5) + ' ' + (yb.height + gutter.y)).attr({'stroke':this.options.stroke,'stroke-width':2});
  			yaxis.labels = ylabels;
- 				 				
+ 				
+ 			
  			//draw x axis
  			//draw labels
  			n = 0;
@@ -1222,8 +1236,9 @@ Uncharted.time = Class.create(Uncharted.line,{
 			options.xaxis.increment = this.getTimeForPeriod(options.xaxis.increment);
 		}
 			
-		//call base class initialize
-		$super(element,data,options);
+		//call base class
+		if(!$super(element,data,options))
+			return false;
 	},
 	getTimeForPeriod: function(period){
 		switch(period){
@@ -1264,7 +1279,7 @@ Uncharted.time = Class.create(Uncharted.line,{
 			for(i = this.options.yaxis.min;i<=this.options.yaxis.max;i+=this.options.yaxis.increment){
 				if(i!=this.options.yaxis.min)
 					ticks.y.push([25,(n*this.options.yaxis.gap)+10+gutter.y + extraHeight]);
-				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y+extraHeight,String.interpret(i)).attr({'text-anchor':'end'}));
+				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y+extraHeight,String.interpret(this.setDecimals(i,2))).attr({'text-anchor':'end'}));
 				n--;
 			}
 			//reset labels to be level all on page

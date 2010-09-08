@@ -18,10 +18,7 @@ Uncharted.base = Class.create({
  		//check element exists
  		if(!$(element))
  			throw new Error('Element does not exist: '  + element);
- 		
- 		if(data.length<1)
- 			return false;
- 		
+ 	 		
  		this.options = {
  			colors: ["#edc240", "#00A8F0", "#C0D800", "#cb4b4b", "#4da74d", "#9440ed"],
  			stroke: "#999",
@@ -64,8 +61,15 @@ Uncharted.base = Class.create({
  		this.element = element;
  		this.paper = Raphael(element);
  		this.data = data;
+ 		this.graphData = this.parseData();
+ 		
+ 		if(this.graphData.total==0)
+ 			return false;
+  	
  		this.width = parseFloat($(element).getWidth());
  		this.height = parseFloat($(element).getHeight());
+ 		
+ 		return true;
   	},
  	parseData: function(){
  				  
@@ -200,6 +204,14 @@ Uncharted.base = Class.create({
 					size = 10;
 
 				return size *= magn;
+		},
+	setDecimals: function(num,dec){
+			num = num.toFixed(dec);
+			if(num%1 == 0)
+				return Number(num).round();
+			else
+				return num;
+			
 		}
 });
 

@@ -46,9 +46,10 @@
 					}
 			},options);
 	 		
-	 		$super(element,data,options);
+	 		//call base class
+			if(!$super(element,data,options))
+				return false;
 	 		
-	 		this.graphData = this.parseData();
 			this.generateAxisRanges();
 			this.generateAxisLabels();
 			this.drawAxis();
@@ -210,7 +211,7 @@
  			for(i = this.options.yaxis.max;i>=this.options.yaxis.min;i-=this.options.yaxis.increment){
  				if(i!=this.options.yaxis.min)
  					ticks.y.push([25,(n*this.options.yaxis.gap)+10+gutter.y]);
- 				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y,String.interpret(i)).attr({'text-anchor':'end'}));
+ 				ylabels.push(this.paper.text(25,(n*this.options.yaxis.gap)+10+gutter.y,String.interpret(this.setDecimals(i,2))).attr({'text-anchor':'end'}));
  				n++;
  			}
  			

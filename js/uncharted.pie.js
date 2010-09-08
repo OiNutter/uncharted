@@ -13,8 +13,9 @@ Uncharted.pie = Class.create(Uncharted.base,{
 	 						}
 	 				},options);
 	 		
-	 		//call base class initialize
-	 		$super(element,data,options);
+	 		//call base class
+	 		if(!$super(element,data,options))
+	 			return false;
 	 		
 	 		this.options.center = this.options.center || {x:this.width/2,y:this.height/2};
 	 		this.options.radius = this.options.radius || (this.height/3);
@@ -57,7 +58,6 @@ Uncharted.pie = Class.create(Uncharted.base,{
  				shadow = this.options.shadow,
  				labels = this.options.labels;
  			 			
- 	 		this.graphData = this.parseData();
  	 		this.graphData.data.each(function(d){
  	 			if(d.data==0){
  	 				segments.fills.push(null);
