@@ -10,7 +10,7 @@
 	#paper{
 		background:#fff;
 		width:500px;
-		height:300px;
+		height:400px;
 	}
 
 </style>
@@ -20,19 +20,20 @@
 	
 </div>
 <script language="JavaScript" type="text/javascript" src="js/prototype.1.6.1.mini.js"></script>
-<script language="Javascript" type="text/javascript" src="js/raphael/raphael.1.5.2.mini.js"></script>
+<script language="Javascript" type="text/javascript" src="js/raphael/raphael.1.4.1.mini.js"></script>
 <script language="Javascript" type="text/javascript" src="js/uncharted.js"></script>
 <script language="JavaScript" type="text/javascript">
 	
 
 	document.observe('dom:loaded',function(){	
 						
-			var data = [{data:[["\u00a350.00",3010],["\u00a3400.0",68],["\u00a330.00",62],["\u00a3100.0",43],["\u00a30.00",36],["\u00a370.00",11],["\u00a375.00",4]],label:"Cashback Amounts"}];
+			var data = [{data:[["\u00a315",2],["\u00a340",12],["\u00a350",12],["\u00a365",49],["\u00a375",358],["\u00a3100",1218]],label:"Valuation Amounts"}];
+
 
 										
 			var chart = new Uncharted.bar('paper',data,{ gutter:{
 			y:0
-		},legend:{show:false},yaxis:{increment:'auto'}});
+		},legend:{show:false},labels:{show:false},yaxis:{increment:"auto"}});
 	
 	});
 

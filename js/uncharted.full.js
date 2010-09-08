@@ -685,7 +685,8 @@ Uncharted.pie = Class.create(Uncharted.base,{
  			for(i = this.options.xaxis.min;i<=this.options.xaxis.max;i+=this.options.xaxis.increment){
  	 			if(i!=this.options.xaxis.min)
  	 				ticks.x.push([(yb.width+gutter.x+7) + ((n*this.options.xaxis.gap)),(this.height-20)]);
- 	 			xlabels.push(this.paper.text((yb.width+gutter.x+7) + ((n*this.options.xaxis.gap)),(yb.height+gutter.y+10),labels[i]).attr({'text-anchor':'middle'}));
+ 	 			if(!Object.isUndefined(labels[i]))
+ 	 				xlabels.push(this.paper.text((yb.width+gutter.x+7) + ((n*this.options.xaxis.gap)),(yb.height+gutter.y+10),labels[i]).attr({'text-anchor':'middle'}));
  	 			n++;
  	 		}
  			xb = xlabels.getBBox();
