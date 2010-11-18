@@ -1,5 +1,0 @@
-//= require "uncharted.base"
-//= require "uncharted.pie"
-//= require "uncharted.bar"
-//= require "uncharted.line"
-//= require "uncharted.time"
