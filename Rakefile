@@ -2,26 +2,26 @@ require 'rake'
 require 'rake/packagetask'
 require 'yaml'
 
-ROOT_PATH = File.expand_path(File.dirname(__FILE__))
-SRC_PATH = File.join(ROOT_PATH, 'src')
-DIST_PATH = File.join(ROOT_PATH,'dist')
+ROOT_DIR = File.expand_path(File.dirname(__FILE__))
+SRC_DIR = File.join(ROOT_DIR, 'src')
+DIST_DIR = File.join(ROOT_DIR,'dist')
 
-DEBUG_DIR   = File.join(DIST_PATH, 'debug')
-RELEASE_DIR = File.join(DIST_PATH, 'release')
+DEBUG_DIR   = File.join(DIST_DIR, 'debug')
+RELEASE_DIR = File.join(DIST_DIR, 'release')
 
-DOC_DIR  = File.join(ROOT_PATH, 'doc')
-PKG_DIR  = File.join(ROOT_PATH, 'pkg')
+DOC_DIR  = File.join(ROOT_DIR, 'doc')
+PKG_DIR  = File.join(ROOT_DIR, 'pkg')
 
-VERSION  = YAML.load(IO.read(File.join(UNCHARTED_SRC_DIR, 'constants.yml')))['UNCHARTED_VERSION']
+VERSION  = YAML.load(IO.read(File.join(SRC_DIR, 'constants.yml')))['VERSION']
 
-TEST_DIR      = File.join(ROOT_PATH, 'test')
+TEST_DIR      = File.join(ROOT_DIR, 'test')
 TEST_UNIT_DIR = File.join(TEST_DIR, 'unit')
 TMP_DIR       = File.join(TEST_UNIT_DIR, 'tmp')
 
-TEMPLATES_ROOT = File.join(ROOT_PATH, "templates")
+TEMPLATES_ROOT = File.join(ROOT_DIR, "templates")
 TEMPLATES_DIRECTORY = File.join(TEMPLATES_ROOT, "html")
 
-$:.unshift File.join(SCRIPTY2_ROOT, 'vendor', 'sprockets', 'lib')
+$:.unshift File.join(ROOT_DIR, 'vendor', 'sprockets', 'lib')
 
 def sprocketize(path, source, destination=nil)
   destination ||= [*source].first
@@ -56,15 +56,15 @@ end
 
 def dist_from_sources(sources)
   sprocketize("src", sources, "uncharted.js")
-  cp File.join(ROOT,'lib','prototype.1.7.0.js'), File.join(SCRIPTY2_DIST_DIR,'prototype.1.7.0.js')
-  cp File.join(ROOT,'lib','raphael.1.5.2.js'), File.join(SCRIPTY2_DIST_DIR,'raphael.1.5.2.js')
+  cp File.join(ROOT_DIR,'lib','prototype.1.7.0.js'), File.join(DIST_DIR,'prototype.1.7.0.js')
+  cp File.join(ROOT_DIR,'lib','raphael.1.5.2.js'), File.join(DIST_DIR,'raphael.1.5.2.js')
 end
 
 desc "Builds the distribution."
 task :dist => ['dist:default']
 namespace :dist do
   task :default do
-    dist_from_sources(["s2.js"])
+    dist_from_sources(["uncharted.js"])
   end
 end
 
@@ -104,10 +104,10 @@ end
 
 def unify_distribution
   unified = IO.read(File.join(DIST_DIR,'prototype.1.7.0.js')) + IO.read(File.join(DIST_DIR,'raphael.1.5.2.js')) + IO.read(File.join(DIST_DIR,'uncharted.js'))
-  File.open(File.join(RELEASE_DIR,'pro.raph.uncharted.js'), 'w') do |file|
+  File.open(File.join(DIST_DIR,'pro.raph.uncharted.js'), 'w') do |file|
     file.write unified
   end 
-  minify File.join(SCRIPTY2_RELEASE_DIR,'pro.raph.uncharted.js'), File.join(DIST_DIR,'pro.raph.uncharted.min.js')
+  minify File.join(DIST_DIR,'pro.raph.uncharted.js'), File.join(RELEASE_DIR,'pro.raph.uncharted.min.js')
 end
 
 desc "Generate a unified minified version of Prototype, Raphael and Uncharted"
