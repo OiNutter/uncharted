@@ -9,7 +9,7 @@ DIST_DIR = File.join(ROOT_DIR,'dist')
 DEBUG_DIR   = File.join(DIST_DIR, 'debug')
 RELEASE_DIR = File.join(DIST_DIR, 'release')
 
-DOC_DIR  = File.join(ROOT_DIR, 'doc')
+DOCUMENTATION_DIR  = File.join(ROOT_DIR, 'doc')
 PKG_DIR  = File.join(ROOT_DIR, 'pkg')
 
 VERSION  = YAML.load(IO.read(File.join(SRC_DIR, 'constants.yml')))['VERSION']
@@ -18,8 +18,8 @@ TEST_DIR      = File.join(ROOT_DIR, 'test')
 TEST_UNIT_DIR = File.join(TEST_DIR, 'unit')
 TMP_DIR       = File.join(TEST_UNIT_DIR, 'tmp')
 
-TEMPLATES_ROOT = File.join(ROOT_DIR, "templates")
-TEMPLATES_DIRECTORY = File.join(TEMPLATES_ROOT, "html")
+DOC_TEMPLATES_ROOT = File.join(ROOT_DIR, "templates")
+DOC_TEMPLATES_DIR = File.join(DOC_TEMPLATES_ROOT, "html")
 
 $:.unshift File.join(ROOT_DIR, 'vendor', 'sprockets', 'lib')
 
@@ -139,22 +139,21 @@ def doc_from_sources(sources)
     )
       
     secretary.concatenation.save_to(temp.path)
-    rm_rf DOC_DIR
-    mkdir DOC_DIR
+    rm_rf DOCUMENTATION_DIR
+    mkdir DOCUMENTATION_DIR
     
     #begin
       PDoc::Runner.new(temp.path,
-        :output    => DOC_DIR
-        #:templates => TEMPLATES_DIRECTORY
+        :destination    => DOCUMENTATION_DIR
       ).run
     #rescue 
      # puts "\n\nEXCEPTION WHILE RUNNING PDOC, CONTINUING...\n\n"
     #end
   end
   
-  cp File.join(ROOT_DIR, 'lib', 'prototype.1.7.0.js'), File.join(DOC_DIR, 'javascripts')
-  cp File.join(ROOT_DIR, 'lib', 'raphael.1.5.2.js'), File.join(DOC_DIR, 'javascripts')
-  cp File.join(DIST_DIR,'uncharted.js'), File.join(DOC_DIR,'javascripts')
+  cp File.join(ROOT_DIR, 'lib', 'prototype.1.7.0.js'), File.join(DOCUMENTATION_DIR, 'javascripts')
+  cp File.join(ROOT_DIR, 'lib', 'raphael.1.5.2.js'), File.join(DOCUMENTATION_DIR, 'javascripts')
+  cp File.join(DIST_DIR,'uncharted.js'), File.join(DOCUMENTATION_DIR,'javascripts')
 end
 
 namespace :doc do
@@ -171,7 +170,7 @@ namespace :doc do
      puts "  $ git submodule update"
      puts "\nto pull in the necessary submodules.\n\n"
     end
-    require lib
+    require File.join(ROOT_DIR,lib)
   end
   
 end

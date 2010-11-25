@@ -1,5 +1,18 @@
+/**
+ * Uncharted.base
+ * 
+ *  Base class with global methods used in all chart types.  All other chart types inherit from this.
+ **/
 
 Uncharted.base = Class.create({
+	/** section: Uncharted.base
+	 * Uncharted.base.extendOptions(destination,source) -> Object
+	 * 
+	 * - destination (Object): The object to have properties added/overridden
+	 * - source (Object): The object with the new properties
+	 * 
+	 * Recursively merges two options objects and returns the merged object
+	 **/
 	extendOptions: function(destination,source){
 		var property,prop;
 		for (property in source){
