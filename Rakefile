@@ -44,7 +44,7 @@ def sprocketize(path, source, destination=nil)
   secretary.concatenation.save_to(File.join(DIST_DIR, destination))
 end
 
-task :default => [:clean, :dist, :unified, :doc, :package, :clean_package_source]
+task :default => [:clean, :dist, :unified, :doc,:package,:clean_package_source]
 
 desc "Clean the distribution directory."
 task :clean do 
@@ -182,7 +182,7 @@ Rake::PackageTask.new('uncharted', VERSION) do |package|
   package.need_zip = true
   package.package_dir = PKG_DIR
   package.package_files.include(
-    'README.markdown',
+    'README.md',
     'BSD-LICENSE',
     'dist/**/*',
     'doc/**/*',

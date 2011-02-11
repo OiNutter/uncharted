@@ -11,7 +11,7 @@
    * This constant lists the version of version.
   **/
 Uncharted = {
-  version: '<%= VERSION %>',
+  version: '<%= VERSION %>'
 }
 //= require "uncharted.base"
 //= require "charts/uncharted.pie"
