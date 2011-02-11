@@ -35,7 +35,7 @@ Uncharted.time = Class.create(Uncharted.line,{
 	},
 	drawAxis:function(){
 			
-			var n = this.options.yaxis.max/this.options.yaxis.increment,
+			var n = (this.options.yaxis.max-this.options.yaxis.min)/this.options.yaxis.increment,
 				ylabels = this.paper.set(),
 				xlabels = this.paper.set(),
 				gutter = this.options.gutter,
@@ -80,7 +80,6 @@ Uncharted.time = Class.create(Uncharted.line,{
 			n = 0;
 			if(this.options.legend.show && this.options.legend.position=="inside")
 				this.options.xaxis.max += ((this.legend.getBBox().width+gutter.x)/this.options.xaxis.gap)*this.options.xaxis.increment;		
-
 			for(i = this.options.xaxis.min;i<=this.options.xaxis.max;i+=this.options.xaxis.increment){
 	 			d = new Date(i);
 				if(i!=this.options.xaxis.min)
