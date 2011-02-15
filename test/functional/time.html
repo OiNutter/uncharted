@@ -32,12 +32,12 @@
 	document.observe('dom:loaded',function(){	
 	
 	
-		var data = 	[{data:[["1296777600000",15],["1297036800000",7]],label:"Claims"}]
+		var data = 	[{data:[["1296777600000",15],["1297036800000",7],["1297123200000",10],["1297209600000",5],["1297296000000",6],["1297382400000",5],["1297468800000",2],["1297641600000",1],["1297728000000",4]],label:"Claims"}]
 
 		var chart = new Uncharted.time('paper',data,{
                    				xaxis: {
-                  					min: (new Date("2011/02/04")).getTime(),
-                  					max:  (new Date("2011/02/07")).getTime()
+                  					min: (new Date("2011/01/17")).getTime(),
+						max: (new Date(new Date().toDateString())).getTime()
                   				},
                    				legend:{
 									show:false
