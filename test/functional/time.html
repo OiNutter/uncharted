@@ -32,12 +32,12 @@
 	document.observe('dom:loaded',function(){	
 	
 	
-		var data = 	[{data:[["1296777600000",15],["1297036800000",7],["1297123200000",10],["1297209600000",5],["1297296000000",6],["1297382400000",5],["1297468800000",2],["1297641600000",1],["1297728000000",4]],label:"Claims"}]
+		var data = 	[{data:[["1.302822E+12",0],["1.3029084E+12",0],["1.3029948E+12",0],["1.3030812E+12",0],["1.3031676E+12",0],["1.303254E+12",0],["1.3033404E+12",0]],label:"Visits"}];
 
 		var chart = new Uncharted.time('paper',data,{
                    				xaxis: {
-                  					min: (new Date("2011/01/17")).getTime(),
-						max: (new Date(new Date().toDateString())).getTime()
+                  					min: (new Date("2011/04/15")).getTime(),
+						max: (new Date("2011/04/21")).getTime()
                   				},
                    				legend:{
 									show:false

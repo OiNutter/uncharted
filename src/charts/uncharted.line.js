@@ -71,7 +71,14 @@ Uncharted.line = Class.create(Uncharted.base,{
  			this.options.xaxis.min = (Object.isNumber(this.options.xaxis.min)) ? this.options.xaxis.min : this.getMinVal('x');
  			this.options.yaxis.max = (Object.isNumber(this.options.yaxis.max)) ? this.options.yaxis.max : this.getMaxVal('y');
  			this.options.yaxis.min = (Object.isNumber(this.options.yaxis.min)) ? this.options.yaxis.min : this.getMinVal('y');
+ 			
  	 			
+ 			if(this.options.xaxis.max==this.options.xaxis.min)
+ 				this.options.xaxis.max = this.options.xaxis.min + 10;
+ 	 			
+ 			if(this.options.yaxis.max==this.options.yaxis.min)
+ 				this.options.yaxis.max = this.options.yaxis.min + 10; 			
+ 			
  			if(this.options.xaxis.increment != "auto" && (this.options.xaxis.max-this.options.xaxis.min) % this.options.xaxis.increment > 0)
  					this.options.xaxis.max += this.options.xaxis.increment - ((this.options.xaxis.max-this.options.xaxis.min) % this.options.xaxis.increment);		
  					
