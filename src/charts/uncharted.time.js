@@ -7,15 +7,19 @@ Uncharted.time = Class.create(Uncharted.line,{
 			monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 			xaxis: {
 				increment:"auto",
-				minSize:50
+				minSize:50,
+				minIncrement:'day'
 				},
 			tags:{
 				format:"this.options.monthNames[(new Date(x)).getMonth()] + ' ' + (new Date(x)).getDate() + ',' + y"
 				}
 		},options);
-		if(Object.isString(options.xaxis.increment)){
+		
+		if(Object.isString(options.xaxis.increment))
 			options.xaxis.increment = this.getTimeForPeriod(options.xaxis.increment);
-		}
+			
+		if(Object.isString(options.xaxis.minIncrement))
+            options.xaxis.minIncrement = this.getTimeForPeriod(options.xaxis.minIncrement);
 			
 		//call base class
 		if(!$super(element,data,options))
@@ -29,6 +33,8 @@ Uncharted.time = Class.create(Uncharted.line,{
 			case 'hour' : return 3600000; break;
 			case 'day': return 86400000;break;
 			case 'week': return 604800000;break;
+			case 'month': return 2678400000; break;
+			case 'year' : return 31622400000; break;
 			case 'auto': return period; break;
 			default: return 2419200000; break;
 		}
@@ -84,7 +90,7 @@ Uncharted.time = Class.create(Uncharted.line,{
 	 			d = new Date(i);
 				if(i!=this.options.xaxis.min)
 	 				ticks.x.push([(yb.width+gutter.x+5) + ((n*this.options.xaxis.gap)),(this.height-20)]);
-	 			xlabels.push(this.paper.text((yb.width+gutter.x+5) + ((n*this.options.xaxis.gap)),(yb.height+gutter.y+10+extraHeight),monthNames[d.getMonth()] + " " + d.getDate()).attr({'text-anchor':'middle'}));
+	 			xlabels.push(this.paper.text((yb.width+gutter.x+5) + ((n*this.options.xaxis.gap)),(yb.height+gutter.y+10+extraHeight),this.formatDate(i)).attr({'text-anchor':'middle'}));
 	 			n++;
 	 		}
 			xb = xlabels.getBBox();
@@ -106,5 +112,27 @@ Uncharted.time = Class.create(Uncharted.line,{
 	 		 	 		
 	 		this.ticks = ticks;
 	 					
+		},
+		formatDate: function(timestamp){
+		    
+		    var d = new Date(timestamp),
+		        monthNames = this.options.monthNames;
+		    
+		    if(this.options.xaxis.increment>=this.getTimeForPeriod('year'))
+		      return d.getFullYear();
+		    else if(this.options.xaxis.increment>=this.getTimeForPeriod('month'))
+		      return monthNames[d.getMonth()] + " " + d.getFullYear();
+		    else if(this.options.xaxis.increment>=this.getTimeForPeriod('day')) 
+		      return monthNames[d.getMonth()] + " " + d.getDate();
+		    else if(this.options.xaxis.increment>=this.getTimeForPeriod('hour') && (this.options.xaxis.max-this.options.xaxis.min)>this.getTimeForPeriod('day'))
+		      return (d.getHours()>12 ? d.getHours()-12 : d.getHours()) + ":" + (d.getMinutes()<10 ? "0" + d.getMinutes()  : d.getMinutes()) + (d.getHours()>=12 ? "pm" : "am") + "\n" + monthNames[d.getMonth()] + " " + d.getDate();
+		    else if(this.options.xaxis.increment>=this.getTimeForPeriod('hour'))
+		      return d.getHours() + ":" + (d.getMinutes()<10 ? "0" + d.getMinutes()  : d.getMinutes());
+		    else if(this.options.xaxis.increment>=this.getTimeForPeriod('minutes'))
+		      return d.getMinutes();
+		    else if(this.options.xaxis.increment>=this.getTimeForPeriod('seconds'))
+              return d.getSeconds();
+            else
+              return d.getMilliSeconds();
 		}
 });

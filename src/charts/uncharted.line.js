@@ -1,4 +1,4 @@
-Uncharted.line = Class.create(Uncharted.base,{
+    Uncharted.line = Class.create(Uncharted.base,{
 	 initialize: function($super,element,data,options){
 			//set chart specific default options
 	 	options = options || {};
@@ -10,7 +10,8 @@ Uncharted.line = Class.create(Uncharted.base,{
 					gap:null,
 					x:null,
 					y:null,
-					minSize:20
+					minSize:20,
+					minIncrement:null
 					},
 				yaxis: {
 					max:null,
@@ -19,7 +20,8 @@ Uncharted.line = Class.create(Uncharted.base,{
 					gap:null,
 					x:null,
 					y:null,
-					minSize:20
+					minSize:20,
+					minIncrement:null
 					},
 				shadow: {
 					size:2
@@ -101,7 +103,9 @@ Uncharted.line = Class.create(Uncharted.base,{
   				
   				if(!Object.isUndefined(this.options.monthNames))
  					this.options.xaxis.increment *= 60;
-   				  				
+ 					
+ 				this.options.xaxis.increment = (this.options.xaxis.minIncrement !== null && this.options.xaxis.increment<this.options.xaxis.minIncrement) ? this.options.xaxis.minIncrement : this.options.xaxis.increment;
+   				    				  				
  				if(this.options.xaxis.max%this.options.xaxis.increment > this.options.xaxis.min)
  					this.options.xaxis.max += this.options.xaxis.increment-(this.options.xaxis.max%this.options.xaxis.increment);
  				else if(this.options.xaxis.max%this.options.xaxis.increment < this.options.xaxis.min)
@@ -110,8 +114,9 @@ Uncharted.line = Class.create(Uncharted.base,{
   			}
  	 			
  			if(this.options.yaxis.increment=="auto"){
+ 			    
  				delta = (this.options.yaxis.minSize*(this.options.yaxis.max-this.options.yaxis.min))/(this.height - 30 - this.options.gutter.y*2);
- 				this.options.yaxis.increment = this.roundNum(delta);
+ 				this.options.yaxis.increment = (this.options.yaxis.minIncrement !== null && delta<this.options.yaxis.minIncrement) ? this.options.yaxis.minIncrement : this.roundNum(delta);
   			 				
  				if(this.options.yaxis.max%this.options.yaxis.increment > this.options.yaxis.min)
  					this.options.yaxis.max += this.options.yaxis.increment-(this.options.yaxis.max%this.options.yaxis.increment);
