@@ -2,6 +2,7 @@
 	 initialize: function($super,element,data,options){
 	 		options = options || {};
 	 		options = this.extendOptions({
+	 		    multiColored:false,
 				xaxis: {
 					max:null,
 					min:null,
@@ -265,8 +266,8 @@
  			 		
   			this.sets.each(function(s,i){
   				bars = this.paper.set();
-  				s.bars.each(function(b){
-  					bar = this.paper.rect(b[0],b[1],b[2],b[3]).attr({'fill':this.options.colors[i],'stroke-opacity':this.options.strokeOpacity});
+  				s.bars.each(function(b,n){
+  					bar = this.paper.rect(b[0],b[1],b[2],b[3]).attr({'fill':((this.sets.length==1 && this.options.multiColored==true) ? this.options.colors[n] : this.options.colors[i]),'stroke-opacity':this.options.strokeOpacity});
   					bars.push(bar);
   					
   				}.bind(this));
