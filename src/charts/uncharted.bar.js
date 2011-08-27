@@ -27,20 +27,7 @@
 				legend: {
 					position:"inside"
 					},
-				points: {
-					show:false,
-					marker:'dot',
-					markerWidth:4,
-					markerHeight:4,
-					markerBorder: "#ccc"
-					},
-				tags: {
-					show:true,
-					marker:'popup',
-					markerWidth:4,
-					markerHeight:4,
-					format: "x + ',' + y"
-					},
+				
 				labels: {
 					show:true,
 					showOn:'rollover'
