@@ -88,7 +88,7 @@ This will create a new interactive pie chart.  The default options are as above,
 	 	}
 	}
 	
-The center and radius allow you to define the size and position of the chart.  If left as the defaults they will be calculated based on the size of the target div.
+The `center` and `radius` allow you to define the size and position of the chart.  If left as the defaults they will be calculated based on the size of the target div.
 
 The data for a pie chart should be formatted as follows:
 
@@ -106,4 +106,204 @@ If you want to add a hyperlink to a section you can specify it in the data secti
 		{data:3,label:"Data 3"}		
 	]
 	
-Notice not all data segments have to have a link.
+Notice that not all data segments have to have a link.
+
+###Bar###
+
+	var bar = new Uncharted.bar(element,data[,options]);
+	
+This will create a new interactive bar chart.  At the moment it only creates charts with vertical columns but I will be adding a horizontal option later, along with stacking columns.
+The default options are as above, with the following additions/overrides:
+
+	{
+		multiColored:false,
+		xaxis: {
+				max:null,
+				min:null,
+				increment:1,
+				gap:null,
+				x:null,
+				y:null,
+				minSize:20
+		},
+		yaxis: {
+				max:null,
+				min:0,
+				increment:1,
+				gap:null,
+				x:null,
+				y:null,
+				minSize:20
+		},
+		shadow: {
+				size:2
+		},
+		legend: {
+				position:"inside"
+		},
+		labels: {
+				show:true,
+				showOn:'rollover'
+		}
+	}
+	
+The `multiColored` option will allow you to have different coloured columns on a single data set. This is ignored if you have multiple data sets, or are showing a legend to avoid confusion.
+
+The data for a bar chart show be formatted as follows (expanded for clarity):
+
+	[
+		{
+			data:[
+					['A',2],
+					['B',3],
+					['C',6],
+					['D',19]
+				],
+			label:"Data 1"
+		}
+	]
+	
+To provide multiple sets merely add more data objects like so:
+
+	[
+		{
+			data:[
+					['A',2],
+					['B',3],
+					['C',6],
+					['D',19]
+				],
+			label:"Data 1"
+		},
+		{
+			data:[
+					['A',5],
+					['B',7],
+					['C',12],
+					['D',1]
+				],
+			label:"Data 2"
+		}
+	]
+	
+###Line###
+
+	var line = new Uncharted.line(element,data[,options]);
+	
+This will create an interactive line chart. The default options are as above, with the following additions/overrides:
+
+	{
+		xaxis: {
+				max:null,
+				min:null,
+				increment:1,
+				gap:null,
+				x:null,
+				y:null,
+				minSize:20,
+				minIncrement:null
+		},
+		yaxis: {
+				max:null,
+				min:null,
+				increment:10,
+				gap:null,
+				x:null,
+				y:null,
+				minSize:20,
+				minIncrement:null
+		},
+		shadow: {
+				size:2
+		},
+		legend: {
+				position:"inside"
+		},
+		points: {
+				show:false,
+				marker:'dot',
+				markerWidth:4,
+				markerHeight:4,
+				markerBorder: "#ccc"
+		},
+		tags: {
+				show:true,
+				marker:'popup',
+				markerWidth:4,
+				markerHeight:4,
+				format: "x + ',' + y"
+		}
+	}
+
+The key new additions here are `points` and `tags`. The `points` option defines wether the chart marks each point of data and joins the dots, or just shows it as a continous line.  
+The `tags` option controls the little popup markers that appear when you rollover a data point telling you what the data is for that point. The `format` option for the marker 
+defines a string that will be eval'ed as javascript to insert the format.
+
+The data for the line chart should be formatted as follows:
+
+	[
+		{
+			data: [
+					[0, 0], [1, 2], [2, 24], [3, 3], [4, 20], [5, 0], [6, 6], [7, 49], [8, 80], [9, 108], [10, 110], [11, 121], [12, 144], [13, 78]
+				],
+			label: "Data 1"
+		}
+	]
+	
+To provide multiple sets merely add more data objects like so:
+
+	[
+		{
+			data: [
+					[0, 0], [1, 2], [2, 24], [3, 3], [4, 20], [5, 0], [6, 6], [7, 49], [8, 80], [9, 108], [10, 110], [11, 121], [12, 144], [13, 78]
+				],
+			label: "Data 1"
+		},
+		{
+			data: [
+					[0, 68], [1, 26], [2, 65], [3, 47], [4, 79], [5, 0], [6, 83], [7, 94], [8, 23], [9, 9], [10, 13], [11, 46], [12, 93], [13, 64]
+				],
+			label: "Data 2"
+		},
+		
+	]
+
+###Time###
+
+	var time = new Uncharted.time(element,data[,options]);
+	
+This will create an in interactive time chart. Time charts are a subclass of line charts so inherit their options, in addition to the base options.  The additions and overrides are as follows:
+
+	{
+		monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+		xaxis: {
+				increment:"auto",
+				minSize:50,
+				minIncrement:'day'
+		},
+		tags:{
+				format:"this.options.monthNames[(new Date(x)).getMonth()] + ' ' + (new Date(x)).getDate() + ',' + y"
+		}
+	}
+
+The chart will alter the x-axis labelling format to the most appropriate date information based on the calculated incremement.
+
+The data for the time chart should be formatted as follows:
+
+	[
+		{
+			data: [
+					[770421600000, 360.60], [773013600000, 359.20], [775692000000, 357.23], [778370400000, 355.42], [780966000000, 355.89], [783644400000, 357.41], [786236400000, 358.74], [788914800000, 359.73]
+				],
+			label: "Data 1"
+		}
+	]
+	
+The x value should be a javascript timestamp.
+
+Mouse Events
+------------
+
+To change the default interactions for the charts you can pass two additional options when creating your chart; `onMouseOver` and `onMouseOut`.  The functions are passed a single argument of chart, 
+which is a reference to the entire chart object, with the `this` scope being the segment, data point or legend key that you have interacted with. Check out the code for each chart to see how the 
+defaults work.
