@@ -6,7 +6,7 @@ It's intended to combine the features I liked from ProtoChart ([http://www.deens
 gRaphaël ( [http://g.raphaeljs.com/](http://g.raphaeljs.com/)). gRaphaël had a lot of interactive features that I liked but I much prefered the look and style of the 
 ProtoChart stuff, so I decided to build my own library as a combination of the two.
 
-A complete set of demos is available at [oinutter.co.uk/uncharted/examples/](http://oinutter.co.uk/uncharted/examples/)
+A complete set of demos is available at [oinutter.github.com/uncharted/](http://oinutter.github.com/uncharted/)
 
 Usage
 -----
@@ -110,7 +110,7 @@ If you want to add a hyperlink to a section you can specify it in the data secti
 	
 Notice that not all data segments have to have a link.
 
-[View Demo](http://oinutter.co.uk/uncharted/examples/#pie)
+[View Demo](http://oinutter.github.com/uncharted/#pie)
 
 ###Bar###
 
@@ -190,7 +190,7 @@ To provide multiple sets merely add more data objects like so:
 		}
 	]
 
-[View Demo](http://oinutter.co.uk/uncharted/examples/#bar)
+[View Demo](http://oinutter.github.com/uncharted/#bar)
 	
 ###Line###
 
@@ -274,7 +274,7 @@ To provide multiple sets merely add more data objects like so:
 		
 	]
 
-[View Demo](http://oinutter.co.uk/uncharted/examples/#line)
+[View Demo](http://oinutter.github.com/uncharted/#line)
 
 ###Time###
 
@@ -309,7 +309,7 @@ The data for the time chart should be formatted as follows:
 	
 The x value should be a javascript timestamp.
 
-[View Demo](http://oinutter.co.uk/uncharted/examples/#time)
+[View Demo](http://oinutter.github.com/uncharted/#time)
 
 Mouse Events
 ------------
