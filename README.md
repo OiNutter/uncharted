@@ -280,7 +280,7 @@ To provide multiple sets merely add more data objects like so:
 
 	var time = new Uncharted.time(element,data[,options]);
 	
-This will create an in interactive time chart. Time charts are a subclass of line charts so inherit their options, in addition to the base options.  The additions and overrides are as follows:
+This will create an interactive time chart. Time charts are a subclass of line charts so inherit their options, in addition to the base options.  The additions and overrides are as follows:
 
 	{
 		monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
