@@ -175,22 +175,23 @@ Uncharted.pie = Class.create(Uncharted.base,{
  			 if(this.url)
  				 $(chart.element).style.cursor = "pointer";
  			 
-             this.scale(1.1, 1.1, cx, cy);
+            //this.scale(1.1,1.1,cx,cy);
+            this.animate({transform: "s1.1 1.1 " + cx + " " +cy},250,"bounce");
              if(this.shadow)
-            	 this.shadow.scale(1.1,1.1,cx + shadow.size,cy + shadow.size);
+            	 this.shadow.animate({transform: "s1.1 1.1 " + (cx+shadow.size) + " " +(cy+shadow.size)},250,"bounce");
              
              if(this.key){
                	 this.key[0].stop();
-                 this.key[0].scale(1.2);
+                 this.key[0].animate({transform:"s1.2 1.2"});
                  this.key[1].attr({"font-weight": 800});
              }
              
              if(this.label){
             	 this.label.stop();
             	 bb = this.label.getBBox();
-            	 xmod = bb.x > cx ? 5: -5;
-            	 ymod = bb.y > cy ? 5 :-5;
-              	 this.label.translate(xmod,ymod);
+            	 xmod = bb.x > cx ? 10: -10;
+            	 ymod = bb.y > cy ? 10 :-10;
+              	 this.label.animate({transform: "t" + xmod + " " + ymod});
              }
              
  		},
@@ -203,22 +204,21 @@ Uncharted.pie = Class.create(Uncharted.base,{
  			if($(chart.element).style.cursor == "pointer")
  				$(chart.element).style.cursor = "default";
  			
- 			this.animate({scale: [1, 1, cx, cy]}, 500, "bounce");
+ 			this.animate({transform: ""}, 500, "bounce");
+ 			
  			 if(this.shadow)
- 				this.shadow.animateWith(this,{scale: [1, 1, cx+shadow.size, cy+shadow.size]}, 500, "bounce");
+ 				this.shadow.animate({transform: ""}, 500, "bounce");
  			 
  			if(this.key){
- 				
- 				this.key[0].animateWith(this,{scale: 1}, 500, "bounce");
+ 				this.key[0].animate({transform: ""}, 500, "bounce");
                 this.key[1].attr({"font-weight": 400});
-
             }
  			
  			 if(this.label){
  				bb = this.label.getBBox();
-            	xmod = bb.x < cx ? 5: -5;
-            	ymod = bb.y < cy ? 5 :-5;
- 				this.label.animateWith(this,{translation:[xmod,ymod]},100,"bounce");
+            	xmod = bb.x < cx ? 10: -10;
+            	ymod = bb.y < cy ? 10 :-10;
+ 				this.label.animate({transform: ""},500,"bounce");
  			 }
  		},
  	onClick: function(chart){
