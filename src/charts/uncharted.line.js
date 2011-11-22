@@ -205,13 +205,11 @@
  	 				
  	 				keyBox.push(this.paper.rect(this.width - gutter.x - 25 - bb.width,gutter.y+10,bb.width+10,bb.height+10).attr({'stroke':this.options.stroke,'fill':'#fff'}));
  	 				kb=keyBox.getBBox();
- 	 				keys.translate(kb.x-bb.x+5,kb.y-bb.y+5);
+ 	 				keys.transform("t" + (kb.x-bb.x+5) + " " + (kb.y-bb.y+5));
  	 			} else {
- 	 				keys.translate((this.width-bb.width-5)-bb.x-gutter.x,0);
+ 	 				keys.transform("t" + ((this.width-bb.width-5)-bb.x-gutter.x) + " " + 0);
  	 			}
- 	 			 	 			
  	 			keyBox.push(keys);
- 	 			
  	 			this.keys = keys;
  	 			return keyBox;
  
@@ -330,7 +328,7 @@
  				chart.toolTip[1].attr('text',this.label);
  				txb = chart.toolTip[1].getBBox();
  				chart.toolTip[0].animate({width:txb.width+10,height:txb.height+10,x:(bb.x+bb.width/2)-(txb.width/2)-5,y:((bb.y - txb.height-10)>=chart.options.gutter.y) ? bb.y - txb.height-10 : bb.y +10,fill:this[1].attr('fill') },200);
- 				chart.toolTip[1].animateWith(chart.toolTip[0],{x:(bb.x+bb.width/2),y:((bb.y - txb.height-10)>=chart.options.gutter.y) ? (bb.y-bb.height/2)-txb.height+7.5 : bb.y+txb.height+7.5},200);
+ 				chart.toolTip[1].animate({x:(bb.x+bb.width/2),y:((bb.y - txb.height-10)>=chart.options.gutter.y) ? (bb.y-bb.height/2)-txb.height+7.5 : bb.y+txb.height+7.5},200);
  			}
  		},
  	onMouseOut: function(chart){
@@ -340,46 +338,48 @@
  			},2000);
  		},
  	onMouseOverLegend: function(chart){
- 			
- 			var shadow = chart.options.shadow,
- 				points = chart.options.points;
- 			
-			 this[0].stop();
-             this[0].scale(1.2);
+            
+            var shadow = chart.options.shadow,
+                points = chart.options.points;
+            
+             this[0].stop();
+             this[0].currentTransform = this[0].transform();
+             this[0].animate({transform: '...s1.2 1.2'},500,'bounce');
              this[1].attr({"font-weight": 800});
              
              chart.lines.each(function(l){
-            	 if(l!= this.line){
-               		 l.attr('stroke-opacity',chart.options.fillOpacity/3);
-               		 if(shadow.show)
-               			 l.shadow.attr('',shadow.fillOpacity/3);
-            	 	 if(points.show)
-            	 		 l.points.attr('fill-opacity',chart.options.fillOpacity/3);
-             	}
+                 if(l!= this.line){
+                     l.attr('stroke-opacity',chart.options.fillOpacity/3);
+                     if(shadow.show)
+                         l.shadow.attr('',shadow.fillOpacity/3);
+                     if(points.show)
+                         l.points.attr('fill-opacity',chart.options.fillOpacity/3);
+                }
              }.bind(this));
              
-           	this.line.toFront();       
+            this.line.toFront();       
              
- 		},
- 	onMouseOutLegend: function(chart){
- 			var shadow = chart.options.shadow,
- 				points = chart.options.points;
- 			
- 			this[0].stop();
- 			this[0].animate({scale: 1}, 500, "bounce");
+        },
+    onMouseOutLegend: function(chart){
+            var shadow = chart.options.shadow,
+                points = chart.options.points;
+            
+            
+            this[0].stop();
+            this[0].animate({transform: this[0].currentTransform},500,'bounce');
             this[1].attr({"font-weight": 400});
             
             chart.lines.each(function(l){
-           	 if(l!= this.line){
-           		 l.attr('stroke-opacity',chart.options.fillOpacity);
-           	 	if(shadow.show)
-           	 		l.shadow.attr('stroke-opacity',shadow.fillOpacity);
-           	 	if(points.show)
-           	 		l.points.attr('fill-opacity',chart.options.fillOpacity);
-            	}
+             if(l!= this.line){
+                 l.attr('stroke-opacity',chart.options.fillOpacity);
+                if(shadow.show)
+                    l.shadow.attr('stroke-opacity',shadow.fillOpacity);
+                if(points.show)
+                    l.points.attr('fill-opacity',chart.options.fillOpacity);
+                }
             }.bind(this));
             
- 		},
+        },
  	onClickLegend: function(chart){
  			var shadow = chart.options.shadow,
  				points = chart.options.points,

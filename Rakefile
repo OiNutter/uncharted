@@ -57,7 +57,7 @@ end
 def dist_from_sources(sources)
   sprocketize("src", sources, "uncharted.js")
   cp File.join(ROOT_DIR,'lib','prototype.1.7.0.js'), File.join(DIST_DIR,'prototype.1.7.0.js')
-  cp File.join(ROOT_DIR,'lib','raphael.2.0.0.js'), File.join(DIST_DIR,'raphael.2.0.0.js')
+  cp File.join(ROOT_DIR,'lib','raphael.2.0.1.js'), File.join(DIST_DIR,'raphael.2.0.1.js')
 end
 
 desc "Builds the distribution."
@@ -92,18 +92,18 @@ desc "Generates a minified version of the distribution (using YUI Compressor)."
 task :min do
   minify File.join(DIST_DIR,'uncharted.js'), File.join(RELEASE_DIR,'uncharted.min.js')
   minify File.join(ROOT_DIR,'lib','prototype.1.7.0.js'), File.join(RELEASE_DIR,'prototype.1.7.0.min.js')
-  minify File.join(ROOT_DIR,'lib','raphael.2.0.0.js'), File.join(RELEASE_DIR,'raphael.2.0.0.min.js')
+  minify File.join(ROOT_DIR,'lib','raphael.2.0.1.js'), File.join(RELEASE_DIR,'raphael.2.0.1.min.js')
 end
 
 desc "Generates a minified version of the distribution (using Google Closure Compiler)."
 task :min_google do
   minify File.join(DIST_DIR,'uncharted.js'), File.join(RELEASE_DIR,'uncharted.min.js'), 'google'
   minify File.join(ROOT_DIR,'lib','prototype.1.7.0.js'), File.join(RELEASE_DIR,'prototype.1.7.0.min.js'), 'google'
-  minify File.join(ROOT_DIR,'lib','raphael.2.0.0.js'), File.join(RELEASE_DIR,'raphael.2.0.0.min.js'), 'google'
+  minify File.join(ROOT_DIR,'lib','raphael.2.0.1.js'), File.join(RELEASE_DIR,'raphael.2.0.1.min.js'), 'google'
 end
 
 def unify_distribution
-  unified = IO.read(File.join(DIST_DIR,'prototype.1.7.0.js')) + IO.read(File.join(DIST_DIR,'raphael.2.0.0.js')) + IO.read(File.join(DIST_DIR,'uncharted.js'))
+  unified = IO.read(File.join(DIST_DIR,'prototype.1.7.0.js')) + IO.read(File.join(DIST_DIR,'raphael.2.0.1.js')) + IO.read(File.join(DIST_DIR,'uncharted.js'))
   File.open(File.join(DIST_DIR,'pro.raph.uncharted.js'), 'w') do |file|
     file.write unified
   end 
@@ -152,7 +152,7 @@ def doc_from_sources(sources)
   end
   
   cp File.join(ROOT_DIR, 'lib', 'prototype.1.7.0.js'), File.join(DOCUMENTATION_DIR, 'javascripts')
-  cp File.join(ROOT_DIR, 'lib', 'raphael.2.0.0.js'), File.join(DOCUMENTATION_DIR, 'javascripts')
+  cp File.join(ROOT_DIR, 'lib', 'raphael.2.0.1.js'), File.join(DOCUMENTATION_DIR, 'javascripts')
   cp File.join(DIST_DIR,'uncharted.js'), File.join(DOCUMENTATION_DIR,'javascripts')
 end
 
